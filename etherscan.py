@@ -1,5 +1,5 @@
 import json, re
-from Helper import get_html_cloud, save_dictionary_to_json, save_list_to_file
+from Helper import get_html_cloud, save_dictionary_to_json, save_list_to_file, add_to_file
 from bs4 import BeautifulSoup
 from time import gmtime, strftime
 
@@ -27,6 +27,7 @@ def get_tx_hashes_from_page(html):
     for results in soup.findAll("span", { "class": "address-tag"}):
         if len(results.text) == 66:
             hashes.append(results.text)
+            add_to_file(LOGFILE,results.text)
     return hashes
 
 total_txs =get_total_number_of_transactions(BASE_URL)
@@ -41,4 +42,3 @@ for i in range (1, pages+2):
     all_hashes.extend(page_hashes)
 
 print "Transaction hashes collected: %s " % str(len(all_hashes))
-save_list_to_file(LOGFILE, all_hashes)
